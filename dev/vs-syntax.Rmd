@@ -1,0 +1,68 @@
+---
+title: "VS Code Snippet Syntax"
+author: "kittipos sirivongrungson"
+date: '2022-05-22'
+output: html_document
+---
+
+[Ref](https://code.visualstudio.com/docs/editor/userdefinedsnippets)
+
+
+## Snippet File
+
+Desired R object: A List with S3 Class: `vscode_snippets`
+
+
+```js
+{
+  "For Loop": {
+    "prefix": ["for", "for-const"],
+    "body": ["for (const ${2:element} of ${1:array}) {", "\t$0", "}"],
+    "description": "A for loop."
+  }
+}
+```
+
+## Individual Snippets
+
+Desired R object: A List, Class = ??
+
+-   `$snippet_name`: (Character vector, len = 1) ex. "For Loop"
+
+-   `$scope`: [Optional] (Character vector, len = 1, sep language = `,`) 
+ex. "markdown,plaintext"
+
+-   `$prefix`: (Character Vector, len ≥ 1) a trigger words
+
+-   `$body`: (Character Vector, len ≥ 1) will be joined into multiple line
+
+-   `$description`: [Optional] (Character Vector, len ≥ 1) description of the snippet
+
+
+
+## In Body
+
+### Tabstops: `tabstops`
+
+
+-   Simple $1, $2, $0 (final location)
+
+-   Placeholder: `${1:foo}`
+
+-   Nested Placeholders: `${1:another ${2:placeholder}}`
+
+-   Choices: `choices` ex. `${1|one,two,three|}`
+
+
+### Variables
+
+`$name` or `${name:default}`
+
+
+
+
+
+
+
+
+
