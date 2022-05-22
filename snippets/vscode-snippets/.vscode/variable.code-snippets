@@ -1,0 +1,11 @@
+{
+    "variable":{
+        "scope": "markdown,plaintext",
+        "prefix": "var",
+        "body": [
+            "File name is $TM_FILENAME",
+            "Selected text is ${TM_SELECTED_TEXT:None}"
+        ],
+        "description": "USER: Testing Variable"
+    }
+}

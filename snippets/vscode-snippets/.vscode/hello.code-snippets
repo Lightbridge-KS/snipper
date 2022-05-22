@@ -17,8 +17,8 @@
 	// },
 	"hello":	{
 		"scope": "markdown,plaintext",
-		"prefix": "hi",
+		"prefix": ["hi", "hel"],
 		"body": "Hello, World",
-		"description": "Say Hello to the world"
+		"description": ["Say Hello to the world", "Again"]
 	}
 }

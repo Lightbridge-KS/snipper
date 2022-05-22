@@ -1,8 +1,8 @@
 {
-  "hello": {
-    "scope": ["markdown,plaintext"],
-    "prefix": ["hi"],
-    "body": ["Hello, World"],
-    "description": ["Say Hello to the world"]
-  }
+  // "hello": {
+  //   "scope": ["markdown,plaintext"],
+  //   "prefix": ["hi"],
+  //   "body": ["Hello, World"],
+  //   "description": ["Say Hello to the world"]
+  // }
 }
