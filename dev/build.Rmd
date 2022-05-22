@@ -1,0 +1,357 @@
+---
+title: "Build R Package"
+author: "Your Name"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+knitr::opts_chunk$set(eval = FALSE)
+here::i_am("dev/build.Rmd")
+library(here)
+```
+
+# How To
+
+Essential Manuals and Packages:
+
+-  [R Package Book](https://r-pkgs.org)
+-  [usethis](https://usethis.r-lib.org)
+
+I recommend initial setup by running the code that is not comment. Then, run the other commented code when you're ready.
+
+# Git
+
+```{r use_git}
+usethis::use_git()
+```
+
+# Ignore
+
+## Git Ignore
+
+Tell Git not to track theses:
+
+```{r use_git_ignore}
+usethis::use_git_ignore("/dev/") # (Optional) ignore `dev` folder at PKG root
+# usethis::use_git_ignore("file") 
+```
+
+## Build Ignore
+
+Tell R not to build theses into R package:
+
+```{r use_build_ignore}
+usethis::use_build_ignore("dev") # (Require) if you use this template
+# Testing VS Code Snippet
+usethis::use_build_ignore("snippets")
+```
+
+# Metadata
+
+## DESCRIPTION
+
+```{r use_description}
+# usethis::use_description()
+```
+
+## LICENSE
+
+Use licence file by `use_*_license()` family of functions
+
+```{r license}
+usethis::use_mit_license() # MIT
+```
+
+# User Doc
+
+## README
+
+```{r readme}
+# usethis::use_readme_rmd()
+```
+
+Lifecycle badges
+
+```{r lifecycle_badge}
+# usethis::use_lifecycle_badge("experimental")
+```
+
+## Vignette
+
+```{r vignette}
+# usethis::use_vignette("PKG")
+
+## Articles
+# usethis::use_article()
+```
+
+## NEWS
+
+```{r news}
+# usethis::use_news_md()
+```
+
+
+# Dependencies
+
+## Imports
+
+A recommended approach
+
+```{r imports}
+# usethis::use_pipe() # If package use `%>%`
+# usethis::use_tibble() # If package use `tbl_df` class
+
+# usethis::use_package("pkg") 
+```
+
+```{r imports_dev}
+## Developmental Package (not on CRAN)
+# usethis::use_dev_package("pkg", remote = "OWNER/REPO")
+```
+
+## Import from
+
+Importing a function from another package allows you to refer to it without a namespace (e.g., `fun()` instead of `package::fun()`).
+
+```{r import_from}
+# usethis::use_import_from("rlang", ":=") # Must have if use `:=`
+```
+
+## Suggests
+
+Use suggested packages for example datasets, to run tests, build vignettes, or maybe there’s only one function that needs the package.
+
+```{r suggests}
+# usethis::use_package("pkg", type = "Suggests")
+```
+
+# Functions
+
+Write some R functions!
+
+```{r}
+# usethis::use_r("fun1")
+# usethis::use_test("fun1")
+```
+
+
+# Testing
+
+## testthat
+
+```{r use_testthat}
+# usethis::use_testthat()
+```
+
+Helper function for testing can be place in `tests/testthat/helper-tests.R`
+
+```{r}
+# fs::file_create(here("tests/testthat/helper-tests.R"))
+```
+
+## Package Coverage (Local)
+
+See [covr](https://covr.r-lib.org)
+
+```{r}
+# covr::package_coverage()
+```
+
+for interactive use in viewer pane:
+
+```{r}
+# covr::report()
+```
+
+
+
+# Data
+
+## Exported Data
+
+-   `usethis::use_data()`: To store exported data in `data/`. 
+Each file in this directory should be `.rda` file containing a single object.
+
+-   `usethis::use_data_raw()`: To store code that used for data preparation in `data-raw/` 
+
+
+```{r exported-data}
+# usethis::use_data(data1) 
+
+# usethis::use_data_raw("data1") # Code to prepare data
+```
+
+
+**Documenting datasets**
+
+Document the name of the dataset in `R/` as roxygen2:
+
+```{r data-doc-example}
+#' Prices of 50,000 round cut diamonds.
+#'
+#' A dataset containing the prices and other attributes of almost 54,000
+#' diamonds.
+#'
+#' @format A data frame with 53940 rows and 10 variables:
+#' \describe{
+#'   \item{price}{price, in US dollars}
+#'   \item{carat}{weight of the diamond, in carats}
+#'   ...
+#' }
+#' @source \url{http://www.diamondse.info/}
+"diamonds"
+```
+
+
+
+## Internal Data
+
+Save all of the objects for internal use in `R/sysdata.rda.`. They don’t need to be documented.
+
+```{r internal_data}
+# usethis::use_data(int_data1, int_data2, internal = TRUE)
+```
+
+## Raw Data
+
+If you want to show examples of loading/parsing raw data, put the original files in `inst/extdata`.
+
+```{r}
+# usethis::use_directory("inst/extdata")
+```
+
+```{r}
+## Write Raw Data
+# readr::write_csv(mtcars, here("inst/extdata/mtcars.csv"))
+```
+
+
+**Function: Get Path to Example Data**
+
+This function allows user to access paths to raw data. 
+
+Inspired from [readr example](https://github.com/tidyverse/readr/blob/HEAD/R/example.R).
+
+```{r}
+# usethis::use_r("example") # Create `example.R` to store `PKG_example()`
+```
+
+- Copy this `PKG_example()` to `example.R`, replace `PKG` with your package name.
+
+``` r 
+#' Get path to PKG example
+#'
+#' PKG comes bundled with a number of sample files in its `inst/extdata`
+#' directory. This function make them easy to access
+#'
+#' @param file Name of file. If `NULL`, the example files will be listed.
+#' @export
+#' @examples
+#' library(PKG)
+#' PKG_example()
+#' PKG_example("file.csv")
+PKG_example <- function(file = NULL) {
+  
+  if (is.null(file)) {
+    dir(system.file("extdata", package = "PKG"))
+    
+  } else {
+    system.file("extdata", file, package = "PKG", mustWork = TRUE)
+  }
+  
+}
+```
+
+
+# Template
+
+Add an R Markdown Template
+
+```{r use_rmarkdown_template}
+# usethis::use_rmarkdown_template(
+#   template_name = "Template Name",
+#   template_dir = "dir-name",
+#   template_description = "A description of the template",
+#   template_create_dir = FALSE
+# )
+```
+
+See also:
+
+-   [Create Rmd Templates](https://rstudio.github.io/rstudio-extensions/rmarkdown_templates.html)
+
+
+# Global Var
+
+If R CMD Check shows a message like:
+
+    Undefined global functions or variables:
+      var1 var2
+      
+Put this:
+
+```r 
+# Declare global variables 
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("var1", "var2"))
+```
+
+in the same file as where you have package-level documentation.
+
+```{r}
+# usethis::use_package_doc()
+```
+
+See this [Discussion](https://github.com/STAT545-UBC/Discussion/issues/451)
+
+
+# CI workflow
+
+Github action to automate R Package workflow. 
+
+[Learn more](https://orchid00.github.io/actions_sandbox/)
+
+## R-CMD-check
+
+Github action to run R CMD Check in the cloud.
+
+This will 
+
+1. Create a YAML file: `.github/workflows/R-CMD-check.yaml`
+
+2.  Adding R-CMD-check badge to 'README.Rmd'
+
+```{r gha-check-release}
+## Quickstart CI workflow
+# usethis::use_github_action_check_release()
+```
+
+Ref: [Quickstart WF](https://github.com/r-lib/actions/tree/v1/examples#quickstart-ci-workflow)
+
+## Test Coverage
+
+1. Call `usethis::use_coverage()`
+
+```{r use_coverage}
+# usethis::use_coverage()
+```
+
+2. Use github action `test-coverage` 
+
+This will connect your package to codecov.
+
+```{r gha-test-coverage}
+# usethis::use_github_action("test-coverage")
+```
+
+Ref: [test coverage WF](https://github.com/r-lib/actions/tree/v1/examples#test-coverage-workflow)
+
+
+3. Click on codecov badge in README, it will open codecov site, then copy token to clip board, and paste the token and run:
+
+```{r}
+# covr::codecov(token = "your-token")
+```
+
+

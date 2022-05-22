@@ -1,0 +1,56 @@
+---
+title: "Example of Read & Write VS Code Snippets"
+author: "kittipos sirivongrungson"
+date: '2022-05-22'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("dev/vs-readwrite.Rmd")
+library(here)
+library(jsonlite)
+library(dplyr)
+```
+
+### Planning
+
+Object Naming Convention
+
+`{editor}_snippetName_{R.obj}`
+
+## Basic VS Code Snippets
+
+### Read from JSON
+
+```{r vs_hello_ls}
+vs_hello_ls <- jsonlite::fromJSON(
+  here("snippets/vscode-snippets/.vscode/hello.code-snippets")
+  )
+```
+
+
+```{r}
+class(vs_hello_ls)
+
+vs_hello_ls
+```
+
+### Convert to JSON
+
+```{r vs_hello_json}
+vs_hello_json <- toJSON(vs_hello_ls, pretty = TRUE) 
+
+class(vs_hello_json)
+sloop::otype(vs_hello_json)
+vs_hello_json
+```
+
+### Write JSON file
+
+```{r}
+vs_hello_json %>% 
+  writeLines(here("snippets/vscode-snippets/.vscode/hello-out.code-snippets"))
+```
+
+And test that written snippet manually
