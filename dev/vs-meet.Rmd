@@ -1,0 +1,108 @@
+---
+title: "Read VS Code Meet Snippet"
+author: "kittipos sirivongrungson"
+date: '2022-05-28'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("dev/vs-meet.Rmd")
+library(here)
+library(jsonlite)
+library(dplyr)
+library(tibble)
+library(purrr)
+```
+
+## Plan
+
+JSON file -> List -> Tibble (Central format) -> List -> `json` class -> JSON file
+
+
+-   Read `meet.code-snippets` from JSON to List
+
+-   Convert it to tibble format (2 rows) each rows corresponding to one snippet
+
+-   Convert tibble -> list then `toJSON` and write file
+
+
+## Read from JSON to List
+
+```{r vs_meet_ls}
+vs_meet_ls <- jsonlite::fromJSON(
+  here("snippets/vscode-snippets/.vscode/meet.code-snippets")
+  )
+```
+
+```{r}
+str(vs_meet_ls)
+```
+
+## List to Tibble
+
+This will be a shared central format:
+
+```{r vs_meet_tbl}
+vs_meet_tbl <- tibble(
+  snippet_name = names(vs_meet_ls),
+  scope = map(vs_meet_ls, "scope"),
+  prefix = map(vs_meet_ls, "prefix"),
+  body = map(vs_meet_ls, "body"),
+  description = map(vs_meet_ls, "description")
+)
+
+vs_meet_tbl
+```
+
+```{r}
+vs_meet_tbl$scope
+```
+
+
+#### Howto: subset 2nd depth elements
+
+```{r}
+vs_meet_ls %>% map("scope") 
+vs_meet_ls %>% map("prefix")
+```
+
+#### Howto: store list in a tibble 
+
+```{r}
+tibble(
+  a = c("A", "B"),
+  b = list(B = c("B", "C"), B = c("E")),
+  c = list(C = c("D", "E", "F"), C = c("J"))
+) 
+```
+
+
+
+## Tibble back to List
+
+
+```{r}
+vs_meet_tbl
+```
+
+
+```{r vs_meet_ls_again}
+vs_meet_ls_again <- vs_meet_tbl %>% 
+  select(-snippet_name) %>% 
+  as.list() %>% 
+  purrr::transpose(.names = vs_meet_tbl$snippet_name)
+
+vs_meet_ls_again
+```
+
+
+## List to JSON
+
+```{r}
+toJSON(vs_meet_ls_again, pretty = TRUE)
+```
+
+Looks OK
+
+
