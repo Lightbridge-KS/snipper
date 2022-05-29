@@ -3,7 +3,7 @@
         "scope": "markdown,plaintext",
         "prefix": "place",
         "body": [
-            "Hi $1, ${2:Hello} ${3:another ${4:placeholder}}",
+            "Hi $1, ${2:Hello} ${3:another ${4:placeholder}} \\$",
             "${5|one,two,three|}",
             "$0"
         ],
