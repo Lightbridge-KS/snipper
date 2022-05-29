@@ -1,0 +1,230 @@
+---
+title: "Body of Snippets"
+author: "kittipos sirivongrungson"
+date: '2022-05-29'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("dev/vs-body.Rmd")
+library(here)
+library(dplyr)
+library(stringr)
+```
+
+### Tabstops
+
+```{r tabstop_ex1}
+tabstop_ex1 <- "Hi $1 everyone ${2} now ${3:Goodbye} $ {fake} choose ${4|one,two,three|} ${5:nested ${6:placeholder}} \\$"
+
+writeLines(tabstop_ex1)
+```
+
+```{r tabstop_ex1_ts}
+tabstop_ex1_ts <- str_extract_tabstops(tabstop_ex1)[[1]]
+tabstop_ex1_ts
+```
+
+
+### Fun: Construct Tabstops
+
+```{r create_tabstops}
+create_tabstops <- function(locations, 
+                            placeholder = NULL, 
+                            choices = list(), 
+                            variables = NULL
+                            ) {
+  
+  is_simple <- is.null(placeholder) && length(choices) == 0 && is.null(variables)
+  
+  ## Helper Functions
+  emBraces <- function(x) paste0("${", x, "}") 
+  colonBraces <- function(lhs, rhs) emBraces(paste0(lhs, ":", rhs))
+  
+  # Simple
+  if(is_simple){ return(emBraces(locations)) }
+  
+  # Choices
+  if(length(choices) >= 1) {
+    
+    # Validate List
+    if(!is.list(choices)) stop("`choices` must be a list of character vectors.")
+    
+    choices_laps <- purrr::map_chr(choices, ~paste(.x, collapse = ","))
+    out <- emBraces(paste0(locations, "|", choices_laps, "|"))
+    return(out)
+    
+  }
+  
+  # Variable
+  if(!is.null(variables)) {
+    
+    out <- if(is.null(placeholder)) { 
+      # With Placeholder
+      emBraces(variables)
+    } else {  
+      # W/O Placeholder
+      colonBraces(variables, placeholder)
+    }
+    
+    return(out)
+    
+  }
+  
+  # Placeholder
+  if(!is.null(placeholder)) {
+    out <- colonBraces(locations, placeholder)
+    return(out)
+  }
+  
+}
+
+create_tabstops(1:3)
+create_tabstops(1, 
+                choices = list(letters[1:3], c("Hello","hello")))
+create_tabstops(1:2, placeholder = c("A", "B"))
+create_tabstops(1, variables = "TM_SELECTED_TEXT")
+create_tabstops(1, variables = "TM_SELECTED_TEXT", placeholder = "HI")
+```
+
+**Placeholders**
+  
+```{r}
+loc_ex1 <- 1:3
+ph_ex1 <- c("Hello", "Goodbye", "Hi")
+paste0(loc_ex1, ":", ph_ex1)
+```
+  
+**Choices**
+
+```{r}
+choice_ex1 <- list(c("one", "two", "three"), c("A", "B"))
+
+paste0("|", paste(choice_ex1[[1]], collapse = ","), "|")
+paste0("|", paste(choice_ex1[[2]], collapse = ","), "|")
+```
+
+
+### Fun: Extract Tabstops
+
+```{r str_extract_tabstops}
+str_extract_tabstops <- function(string) {
+  
+  # Regex adapted from: <https://stackoverflow.com/a/41749376/13775646>
+  reg_tabstops <- "(?<!\\\\)\\$(\\d+|\\{(?>[^{$}]|(?R))*\\})"
+  str_extract_all_perl(string, reg_tabstops)
+  
+}
+```
+
+```{r}
+tabstop_ex1
+
+str_extract_tabstops(tabstop_ex1)
+str_extract_tabstops(c("${1:Hello} $2", "${1:Hey}"))
+```
+
+
+
+### Helper: Str Extract All PCRE
+
+```{r str_extract_all_perl}
+str_extract_all_perl <- function(string, pattern) {
+  
+  matched <- gregexpr(pattern, string, perl = TRUE)
+  
+  out <- vector("list", length(string))
+  
+  for (i in seq_along(string)) {
+    
+    s <- string[[i]]
+    m <- matched[[i]]
+  
+    out[[i]] <- substring(s, m, m + attr(m, "match.length") - 1)
+    
+  }
+  
+  names(out) <- names(string)
+  out
+  
+}
+
+str_extract_all_perl(c(a = "x1", b = "x2 x3"), "\\d+")
+```
+
+
+```{r}
+ss <- c("x1", "x2 x3")
+matched <- gregexpr("\\d+", ss, perl = TRUE)
+
+substring(ss[1], matched[[1]], matched[[1]] + attr(matched[[1]], "match.length") - 1)
+
+substring(ss[2], matched[[2]], matched[[2]] + attr(matched[[2]], "match.length") - 1)
+```
+
+
+
+### Howto: Extract `{}` and content
+
+
+```{r}
+tabstop_ex1
+
+matched <- gregexpr("(?<!\\\\)\\$(\\d+|\\{(?>[^{$}]|(?R))*\\})", 
+                    tabstop_ex1, perl = TRUE)
+substring(tabstop_ex1, matched[[1]], matched[[1]] + attr(matched[[1]], "match.length") - 1)
+```
+
+
+```{r}
+s <- "asf {GETME} asdf {HI {AGAIN} YO}"
+
+matched <- gregexpr("\\{(?>[^{}]|(?R))*\\}", s, perl = TRUE)
+substring(s, matched[[1]], matched[[1]] + attr(matched[[1]], "match.length") - 1)
+```
+
+
+
+```{r}
+s <- "ass (as) sdf (ff) (a(s))d"
+
+matched <- gregexpr("\\((?>[^()]|(?R))*\\)", s, perl = TRUE)
+substring(s, matched[[1]], matched[[1]] + attr(matched[[1]], "match.length") - 1)
+```
+
+
+
+```{r}
+s <- c("ass (as) sdf (ff) asd")
+matched <- gregexpr("a", s, perl = TRUE)
+substring(s, matched[[1]], matched[[1]] + attr(matched[[1]], "match.length") - 1)
+```
+
+
+From [stackoverflow](https://stackoverflow.com/a/41749376/13775646)
+
+```{r}
+s = "(a(a(a)(aa(a)a)a)a)((b(b)b)b)(((cc)c)c)"
+
+matched <- gregexpr("\\((?>[^()]|(?R))*\\)", s, perl = T)
+substring(s, matched[[1]], matched[[1]] + attr(matched[[1]], "match.length") - 1)
+```
+
+
+
+### Howto: Extract `$`
+
+Extract `$` that is not come after `\\` (ignore `\\$`)
+
+```{r}
+reg_tab_dollar <- "(?<!\\\\)\\$"
+tabstop_ex1 %>% str_extract_all(reg_tab_dollar)
+```
+
+
+```{r}
+"\\$ a $" %>% str_extract_all("\\\\")
+"\\$ a $" %>% str_extract_all("(?<!\\\\)\\$")
+```
+
