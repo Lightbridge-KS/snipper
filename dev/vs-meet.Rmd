@@ -78,20 +78,36 @@ tibble(
 ```
 
 
+## Manipulate Tibble Snippet
+
+```{r}
+vs_meet_tbl$body
+```
+
+Update $body of "welcome"
+
+```{r vs_meet_tbl_mod}
+vs_meet_tbl_mod <- vs_meet_tbl %>%
+  rows_update(
+    tibble(
+      snippet_name = "welcome",
+      body = list(welcome = c("Hi ${1:everyone}", "Welcome to the meeting"))
+    )
+  )
+
+vs_meet_tbl_mod
+```
+
+
 
 ## Tibble back to List
 
 
-```{r}
-vs_meet_tbl
-```
-
-
 ```{r vs_meet_ls_again}
-vs_meet_ls_again <- vs_meet_tbl %>% 
+vs_meet_ls_again <- vs_meet_tbl_mod %>% 
   select(-snippet_name) %>% 
   as.list() %>% 
-  purrr::transpose(.names = vs_meet_tbl$snippet_name)
+  purrr::transpose(.names = vs_meet_tbl_mod$snippet_name)
 
 vs_meet_ls_again
 ```
@@ -99,10 +115,18 @@ vs_meet_ls_again
 
 ## List to JSON
 
-```{r}
-toJSON(vs_meet_ls_again, pretty = TRUE)
+```{r vs_meet_json_out}
+vs_meet_json_out <- toJSON(vs_meet_ls_again, pretty = TRUE)
+vs_meet_json_out
 ```
 
+
 Looks OK
+
+```{r}
+vs_meet_json_out %>% 
+  writeLines(here("snippets/vscode-snippets/.vscode/out/meet-out.code-snippets"))
+```
+
 
 

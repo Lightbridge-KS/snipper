@@ -15,21 +15,21 @@
   // 	],
   // 	"description": "Log output to console"
   // },
-  "welcome": {
-    "scope": "markdown,plaintext",
-    "prefix": ["wel", "welcome"],
-    "body": ["Hi ${1:everyone}", "Welcome", "$0"],
-    "description": ["Welcome guess"]
-  },
-  "goodbye":{
-    "scope": "markdown,plaintext",
-    "prefix": ["good", "goodbye"],
-    "body": [
-      "Nice to see ${1:you}",
-      "Goodbye!,",
-      "Best",
-      "$0"
-    ],
-    "description": "Say goodbye to guess"
-  }
+  // "welcome": {
+  //   "scope": "markdown,plaintext",
+  //   "prefix": ["wel", "welcome"],
+  //   "body": ["Hi ${1:everyone}", "Welcome", "$0"],
+  //   "description": ["Welcome guess"]
+  // },
+  // "goodbye":{
+  //   "scope": "markdown,plaintext",
+  //   "prefix": ["good", "goodbye"],
+  //   "body": [
+  //     "Nice to see ${1:you}",
+  //     "Goodbye!,",
+  //     "Best",
+  //     "$0"
+  //   ],
+  //   "description": "Say goodbye to guess"
+  // }
 }
