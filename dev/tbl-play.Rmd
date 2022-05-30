@@ -1,0 +1,106 @@
+---
+title: "Tibble Play"
+author: "kittipos sirivongrungson"
+date: '2022-05-30'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("dev/tbl-play.Rmd")
+library(here)
+library(dplyr)
+library(tibble)
+```
+
+
+
+
+```{r new_atom}
+new_atom <- function(x = numeric()) {
+  stopifnot(is.numeric(x))
+  class(x) <- "atom"
+  x
+}
+```
+
+```{r}
+new_atom(1:2)
+```
+
+
+```{r}
+new_molecule <- function(x = list()) {
+  stopifnot(is.list(x))
+  class(x) <- "molecule"
+  x
+}
+
+new_molecule(list(x = new_atom(1:2), y = new_atom(3:4)))
+```
+
+
+Assign subclass to `tbl_df`
+
+```{r}
+t_tbl <- tibble(
+  name = c("a", "b"),
+  x = list(a = new_atom(1:2), b = new_atom(4:6)),
+  y = list(a = new_molecule(list(letters[1:5])), 
+           b = new_molecule(list(c("x", "y"))))
+)
+
+class(t_tbl) <- c("test" ,class(t_tbl))
+class(t_tbl)
+
+t_tbl
+```
+
+
+```{r}
+t_tbl$x
+t_tbl$y
+```
+
+
+
+
+### Operation on subclass of `tbl_df`
+
+Conclusion: subclass is preserved with operations
+
+
+
+#### Mutate Columns
+
+```{r}
+t_tbl %>% 
+  mutate(y = paste(name, 1:2)) %>% 
+  class()
+```
+
+#### Select Columns
+
+```{r}
+t_tbl[1, ] %>% class()
+
+t_tbl %>% 
+  select(name) %>% 
+  class()
+```
+
+#### Filter Rows
+
+```{r}
+t_tbl %>% 
+  filter(name == "a") %>% 
+  class()
+```
+
+#### Add Rows
+
+```{r}
+t_tbl %>% 
+  dplyr::rows_insert(tibble(name = "c", x = list(1:2)), by = "name") 
+```
+

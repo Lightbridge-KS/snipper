@@ -100,10 +100,13 @@ Lifecycle badges
 A recommended approach
 
 ```{r imports}
-# usethis::use_pipe() # If package use `%>%`
-# usethis::use_tibble() # If package use `tbl_df` class
+usethis::use_pipe() # If package use `%>%`
+usethis::use_tibble() # If package use `tbl_df` class
 
-# usethis::use_package("pkg") 
+usethis::use_package("fs") 
+usethis::use_package("tibble") 
+usethis::use_package("purrr") 
+usethis::use_package("jsonlite") 
 ```
 
 ```{r imports_dev}
@@ -142,7 +145,7 @@ Write some R functions!
 ## testthat
 
 ```{r use_testthat}
-# usethis::use_testthat()
+usethis::use_testthat()
 ```
 
 Helper function for testing can be place in `tests/testthat/helper-tests.R`
@@ -219,13 +222,34 @@ Save all of the objects for internal use in `R/sysdata.rda.`. They don’t need 
 If you want to show examples of loading/parsing raw data, put the original files in `inst/extdata`.
 
 ```{r}
-# usethis::use_directory("inst/extdata")
+usethis::use_directory("inst/extdata")
+
+usethis::use_directory("inst/extdata/vscode") # VS Code Snippets
 ```
+
+Copy `meet.code-snippet`
+
+```{r}
+fs::file_copy(here("snippets/vscode-snippets/.vscode/meet.code-snippets"),
+              here("inst/extdata/vscode")
+              )
+```
+
+Copy `r.code-snippets`
+
+```{r}
+fs::file_copy(here("snippets/vscode-snippets/.vscode/r.code-snippets"),
+              here("inst/extdata/vscode")
+              )
+```
+
 
 ```{r}
 ## Write Raw Data
 # readr::write_csv(mtcars, here("inst/extdata/mtcars.csv"))
 ```
+
+
 
 
 **Function: Get Path to Example Data**
@@ -235,7 +259,8 @@ This function allows user to access paths to raw data.
 Inspired from [readr example](https://github.com/tidyverse/readr/blob/HEAD/R/example.R).
 
 ```{r}
-# usethis::use_r("example") # Create `example.R` to store `PKG_example()`
+usethis::use_r("example") # Create `example.R` to store `PKG_example()`
+usethis::use_test("example")
 ```
 
 - Copy this `PKG_example()` to `example.R`, replace `PKG` with your package name.

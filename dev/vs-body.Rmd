@@ -13,7 +13,9 @@ library(dplyr)
 library(stringr)
 ```
 
-### Tabstops
+## Tabstops
+
+### Tabstops Example
 
 ```{r tabstop_ex1}
 tabstop_ex1 <- "Hi $1 everyone ${2} now ${3:Goodbye} $ {fake} choose ${4|one,two,three|} ${5:nested ${6:placeholder}} \\$"
@@ -27,10 +29,34 @@ tabstop_ex1_ts
 ```
 
 
-### Fun: Construct Tabstops
 
-```{r create_tabstops}
-create_tabstops <- function(locations, 
+### Extract Tabstops
+
+```{r}
+vs_meet_tbl$body$welcome
+str_extract_tabstops(vs_meet_tbl$body$welcome)
+```
+
+
+```{r}
+vs_meet_tbl %>% 
+  mutate(tabstops = map(body, str_extract_tabstops)) %>% 
+  pull(tabstops)
+```
+
+
+
+
+### Fun: Make Tabstops
+
+Must provide `locations`
+
+if `choices` is supply, ignore `placeholder` and `variables`.
+ 
+`variables` can be supply with or w/o `placeholder` 
+
+```{r tabstops_make}
+tabstops_make <- function(locations, 
                             placeholder = NULL, 
                             choices = list(), 
                             variables = NULL
@@ -80,12 +106,12 @@ create_tabstops <- function(locations,
   
 }
 
-create_tabstops(1:3)
-create_tabstops(1, 
+tabstops_make(1:3)
+tabstops_make(1, 
                 choices = list(letters[1:3], c("Hello","hello")))
-create_tabstops(1:2, placeholder = c("A", "B"))
-create_tabstops(1, variables = "TM_SELECTED_TEXT")
-create_tabstops(1, variables = "TM_SELECTED_TEXT", placeholder = "HI")
+tabstops_make(1:2, placeholder = c("A", "B"))
+tabstops_make(1, variables = "TM_SELECTED_TEXT")
+tabstops_make(1, variables = "TM_SELECTED_TEXT", placeholder = "HI")
 ```
 
 **Placeholders**
@@ -106,7 +132,8 @@ paste0("|", paste(choice_ex1[[2]], collapse = ","), "|")
 ```
 
 
-### Fun: Extract Tabstops
+
+### Fun: Extract Tabstops Elements
 
 ```{r str_extract_tabstops}
 str_extract_tabstops <- function(string) {

@@ -1,0 +1,28 @@
+---
+title: "RStudio Snippets"
+author: "kittipos sirivongrungson"
+date: '2022-05-30'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("dev/rs.Rmd")
+library(here)
+
+```
+
+Probably is [Vim Snippets](https://vimawesome.com/plugin/vim-snippets)
+
+## Read RStudio Snippet
+
+```{r rs_r_chr}
+rs_r_chr <- readLines(here("snippets/rstudio-snippets/r.snippets"))
+head(rs_r_chr)
+```
+
+
+```{r}
+rs_r_chr
+```
+

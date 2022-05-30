@@ -1,0 +1,57 @@
+---
+title: "Planning for snipper"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file()) # Set WD to Root
+here::i_am("dev/plan.Rmd")
+library(here)
+```
+
+Nomenclatures: DEV (for developer), USER (for user)
+
+## Package Structure
+
+-   **inst/**
+
+    -   **rmarkdown/**
+
+        -   RStudio RMD Template 1
+
+    -   **templates/**
+
+        -   Template
+
+### Create Structures
+
+```{r}
+# fs::file_create(here("path"))
+```
+
+## OOP
+
+**snippets_tbl**
+
+-   attributes: "attr_name" = description
+
+### Class Functions (DEV)
+
+**snippets_tbl**
+
+-   `create_snippets_tbl*`: create "snippets_tbl" & set ... attribute
+-   `new_snippets_tbl*`: add "snippets_tbl" class to existing "tbl_df" class
+-   `is_snippets_tbl*`: check class
+
+## Plan: USER functions
+
+1.  `fun1`:
+
+2.  `fun2`:
+
+## Plan: ... functions Family
+
+1.  `fun1`:
+
+2.  `fun2`:
