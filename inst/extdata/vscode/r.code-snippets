@@ -1,0 +1,24 @@
+{
+    "fun": {
+        "scope": "r",
+        "prefix": "function",
+        "body": "function(${1:x}) ${3:{$0\\}}",
+        "description": "Function"
+    },
+    "for": {
+        "scope": "r",
+        "prefix": "for",
+        "body": [
+            "for (${1:identifier} in ${2:collection}) {",
+            "   ${3:selected}",
+            "}"
+        ],
+        "description": "Code snippet for 'for' loop"
+    },
+    "plot": {
+        "scope": "r",
+        "prefix": "plot",
+        "body": "plot(${1:x}, ${2:y}, ${3:...})",
+        "description": "Plot"
+    }
+}
