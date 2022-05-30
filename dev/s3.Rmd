@@ -1,0 +1,38 @@
+---
+title: "S3 OOP"
+author: "kittipos sirivongrungson"
+date: '2022-05-30'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("dev/s3.Rmd")
+library(here)
+
+```
+
+
+```{r}
+usethis::use_r("s3")
+```
+
+
+## Class: `snippets_tbl`
+
+
+### New: `snippets_tbl`
+
+```{r new_snippets_tbl}
+new_snippets_tbl <- function(x = tibble::tibble()) {
+  
+  stopifnot(inherits(x, "tbl_df"))
+  if(inherits(x, "snippets_tbl")) return(x) # Already Has Class
+  
+  class(x) <- c("snippets_tbl", class(x))
+  x
+}
+
+new_snippets_tbl(tibble(x = 1:2)) %>% class()
+```
+
