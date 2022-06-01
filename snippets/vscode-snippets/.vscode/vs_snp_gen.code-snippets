@@ -1,0 +1,12 @@
+{
+  "hello": {
+    "scope": "markdown",
+    "prefix": "hello",
+    "body": ["hello, there", "$0"],
+    "description": "Say Hello"
+  },
+  "world": {
+    "prefix": "world",
+    "body": ["Hi", "Hi", "Welcome to a new world!"]
+  }
+}
