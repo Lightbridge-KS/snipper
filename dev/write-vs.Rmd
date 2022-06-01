@@ -1,0 +1,142 @@
+---
+title: "Write VS Code Snippets"
+author: "kittipos sirivongrungson"
+date: '2022-06-01'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("dev/write-vs.Rmd")
+library(here)
+library(dplyr)
+```
+
+```{r}
+usethis::use_r("vscode-write")
+rstudioapi::navigateToFile(here("tests/testthat/test-vscode-write.R"))
+```
+
+
+## Example `snippets_tbl`
+
+```{r path_vs}
+path_vs <- snipper::snipper_example("vscode", return_path = T)
+```
+
+```{r vs_snp_tbl1}
+vs_snp_tbl1 <- snipper::read_snip_vscode(path_vs)
+vs_snp_tbl1
+```
+
+```{r}
+list(
+  hello = list(
+    scope = "markdown",
+    prefix = "hello",
+    body = c("hello, there", "$0"),
+    description = "Say Hello"
+  )
+) %>% 
+  as_snippets_tbl() %>% 
+  show_snip_vscode()
+```
+
+
+```{r vs_snp_gen_ls}
+vs_snp_gen_ls <- list(
+  hello = list(
+    scope = "markdown",
+    prefix = "hello",
+    body = c("hello, there", "$0"),
+    description = "Say Hello"
+  ),
+  world = list(
+    prefix = "world",
+    body = c("Hi","Hi", "Welcome to a new world!")
+  )
+) 
+
+vs_snp_gen_tbl <- as_snippets_tbl(vs_snp_gen_ls) 
+vs_snp_gen_tbl
+```
+
+
+
+## Show
+
+Show it in R console as VS Code JSON
+
+```{r show_snip_vscode}
+show_snip_vscode <- function(snp) {
+  
+  ls <- as.list.snippets_tbl(snp)
+  jsonlite::toJSON(ls, pretty = TRUE, auto_unbox = TRUE)
+  
+}
+
+res <- show_snip_vscode(vs_snp_gen_tbl)
+class(res)
+sloop::otype(res)
+res
+```
+
+```{r}
+as.list.snippets_tbl(vs_snp_gen_tbl) %>% 
+  jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE)
+```
+
+
+## Write VS Code Snippets
+
+```{r write_snip_vscode}
+write_snip_vscode <- function(snp, 
+                              file, 
+                              ext = "code-snippets", 
+                              overwrite = FALSE
+                              ) {
+  
+  
+  file_ext <- fs::path_ext(file)
+  if(file_ext == ""){
+    # Not provided extension
+     file <- fs::path(file, ext = ext)
+  } 
+  
+  validate_write_file(file, overwrite)
+  
+  json <- show_snip_vscode(snp)
+  writeLines(json, file)
+  
+  cli::cli_alert_success("Write VS code snippet file at {.file {file}}")
+  return(invisible(json))
+  
+}
+
+write_snip_vscode(
+  vs_snp_gen_tbl,
+  here("snippets/vscode-snippets/.vscode/vs_snp_gen"),
+  overwrite = F
+  )
+```
+
+
+```{r}
+fs::path_ext("snippets/vscode-snippets/.vscode/vs_snp_gen")
+
+fs::path_ext("snippets/vscode-snippets/.vscode/vs_snp_gen.code-snippets")
+
+fs::path_ext_remove("snippets/vscode-snippets/.vscode/vs_snp_gen.code-snippets")
+
+fs::path("asd/asdf", ext = "code-snippets")
+```
+
+
+```{r}
+show_snip_vscode(vs_snp_gen_tbl) %>% 
+  writeLines(
+    here("snippets/vscode-snippets/.vscode/vs_snp_gen.code-snippets")
+    )
+```
+
+
