@@ -239,9 +239,10 @@ show_snip_vscode(my_snp_md)
 
 You can write snippet tibble into file with `write_snip_*()` functions.
 
-To write VS code snippet into [multi-language, user-defined
+To write snippet tibble as a **VS code snippet** to [multi-language,
+user-defined
 snippet](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-scope)
-(`.code-snippets`) file we use:
+(`.code-snippets`) file, we use:
 
 ``` r
 .old_wd <- setwd(tempdir())
