@@ -68,13 +68,13 @@ usethis::use_mit_license() # MIT
 ## README
 
 ```{r readme}
-# usethis::use_readme_rmd()
+usethis::use_readme_rmd()
 ```
 
 Lifecycle badges
 
 ```{r lifecycle_badge}
-# usethis::use_lifecycle_badge("experimental")
+usethis::use_lifecycle_badge("experimental")
 ```
 
 ## Vignette
