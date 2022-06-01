@@ -94,3 +94,16 @@ y <- 1
 sym_arg(y)
 ```
 
+
+
+## Validate: Write File
+
+```{r validate_write_file}
+validate_write_file <- function(file, overwrite = FALSE) {
+    
+  if(!overwrite && fs::file_exists(file)) cli::cli_abort("Snippet file already exist at {.file {file}}, set {.code overwrite = FALSE} to overwrite.")
+  file
+  
+}
+```
+

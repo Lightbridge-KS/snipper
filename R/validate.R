@@ -39,3 +39,17 @@ validate_snippets_tbl_colnms <- function(x) {
   if(!all(colnms %in% colnames(x))) cli::cli_abort("{.code {x_sym}} Must have column names: {colnms}")
   x
 }
+
+
+#' Validate Write Snippet File
+#'
+#' @param file path to file
+#' @param overwrite whether to overwrite
+#'
+#' @noRd
+validate_write_file <- function(file, overwrite = FALSE) {
+
+  if(!overwrite && fs::file_exists(file)) cli::cli_abort("Snippet file already exist at {.file {file}}, set {.code overwrite = FALSE} to overwrite.")
+  file
+
+}
