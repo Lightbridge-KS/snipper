@@ -352,7 +352,7 @@ This will
 
 ```{r gha-check-release}
 ## Quickstart CI workflow
-# usethis::use_github_action_check_release()
+usethis::use_github_action_check_release()
 ```
 
 Ref: [Quickstart WF](https://github.com/r-lib/actions/tree/v1/examples#quickstart-ci-workflow)

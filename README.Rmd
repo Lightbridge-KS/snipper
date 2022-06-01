@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/Lightbridge-KS/snipper/workflows/R-CMD-check/badge.svg)](https://github.com/Lightbridge-KS/snipper/actions)
 <!-- badges: end -->
 
 > R package to Read, Write, and Manipulate Code Snippets (currently, [VS code snippet](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-scope))
