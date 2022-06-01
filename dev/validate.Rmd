@@ -1,0 +1,96 @@
+---
+title: "Validate"
+author: "kittipos sirivongrungson"
+date: '2022-06-01'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("dev/validate.Rmd")
+library(here)
+
+```
+
+```{r}
+usethis::use_r("validate")
+rstudioapi::navigateToFile("tests/testthat/test-validate.R")
+```
+
+
+## Snippet Tibble
+
+### Validate: List
+
+```{r validate_as_snippets_tbl.list}
+validate_as_snippets_tbl.list <- function(x) {
+  
+  x_sym <- dplyr::ensym(x)
+  
+  # Validate List of List
+  if(!(is.list(x) && purrr::every(x, is.list))){
+    cli::cli_abort("{.code {x_sym}} must be a list containing list of snippets")
+  } 
+  # Element must has names
+  not_valid_names <- any(is.null(names(x)), names(x) == "")
+  if(not_valid_names) cli::cli_abort("Elements in {.code {x_sym}} must have names for {.field snippet_name}.")
+  # Must has "prefix" and "body"
+  has_prefix_n_body <- purrr::every(x, ~all(c("prefix", "body") %in% names(.x)))
+  if(!has_prefix_n_body) cli::cli_abort("Snippets must contain {.field prefix} and {.field body} fields.")
+  
+  x
+  
+}
+
+validate_as_snippets_tbl.list(ls_ex)
+```
+
+```{r}
+l1 <- list(1:2, c("a","b"))
+
+validate_as_snippets_tbl.list(l1)
+
+  l2 <- list(
+    list(
+      prefix = "world",
+      body = "Welcome to a new world!"
+      )
+    )
+  
+    l3 <- list(
+    world = list(
+      scope = "markdown",
+      description = "Say Welcome"
+    )
+  )
+validate_as_snippets_tbl.list(l3)
+```
+
+
+### Validate: Column Names
+
+
+```{r validate_snippets_tbl_colnms}
+validate_snippets_tbl_colnms <- function(x) {
+  
+  colnms <- c("snippet_name", "scope", "prefix", "body", "description")
+  x_sym <- dplyr::ensym(x)
+  # Validate Colnames
+  if(!all(colnms %in% colnames(x))) cli::cli_abort("{.code {x_sym}} Must have column names: {colnms}")
+  x
+}
+
+validate_snippets_tbl_colnms(iris)
+```
+
+
+```{r}
+sym_arg <- function(x) {
+  s <- rlang::as_label(rlang::ensym(x))
+  cli::cli_text("{s}")
+}
+
+y <- 1
+sym_arg(y)
+```
+
