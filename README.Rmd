@@ -94,7 +94,7 @@ my_snp1
 
 ### Data Frame
 
-```{r my_snp2}
+```{r tbl_df}
 tbl_df <- tibble::tibble(
   snippet_name = LETTERS[1:2],
   scope = rep("markdown", 2),
@@ -108,7 +108,7 @@ tbl_df
 
 Convert to snippet tibble
 
-```{r}
+```{r my_snp2}
 my_snp2 <- as_snippets_tbl(tbl_df)
 my_snp2
 ```
@@ -144,7 +144,7 @@ my_snp_all
 
 Filter language for "markdown" and "plaintext"
 
-```{r}
+```{r my_snp_md}
 my_snp_md <- my_snp_all %>% 
   filter(scope == "markdown,plaintext")
 
