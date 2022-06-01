@@ -34,7 +34,7 @@ read_vscode_snippets <- function(paths,
                                  ...
 ) {
 
-  if(!all(fs::file_exists(paths))) stop("`paths` must point to files or directory.", call. = F)
+  if(!all(fs::file_exists(paths))) cli::cli_abort("{.code paths} must point to files or directory.", call. = F)
   # Get File Paths
   is_files <- fs::is_file(paths)
   files_chr <- names(is_files[is_files])
@@ -49,6 +49,7 @@ read_vscode_snippets <- function(paths,
   # Add "snippets_tbl" subclass
   new_snippets_tbl(tbl)
 }
+
 
 
 # Read Multiple Files -----------------------------------------------------
