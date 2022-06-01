@@ -20,6 +20,8 @@ rstudioapi::navigateToFile(here("tests/testthat/test-vscode-write.R"))
 
 ## Example `snippets_tbl`
 
+
+
 ```{r path_vs}
 path_vs <- snipper::snipper_example("vscode", return_path = T)
 ```
@@ -28,18 +30,26 @@ path_vs <- snipper::snipper_example("vscode", return_path = T)
 vs_snp_tbl1 <- snipper::read_snip_vscode(path_vs)
 vs_snp_tbl1
 ```
+```{r}
+path_vs_r <- snipper::snipper_example("vscode/r.code-snippets")
+ 
+l <- as.list(read_snip_vscode(path_vs_r))
+str(l)
+```
+
 
 ```{r}
 list(
   hello = list(
     scope = "markdown",
     prefix = "hello",
-    body = c("hello, there", "$0"),
-    description = "Say Hello"
+    body = c("hello, there", "$0")
+    #description = "Say Hello"
   )
 ) %>% 
-  as_snippets_tbl() %>% 
-  show_snip_vscode()
+  as_snippets_tbl() %>% pull()
+  #show_snip_vscode()
+  as.list.snippets_tbl()
 ```
 
 

@@ -41,8 +41,12 @@ Nomenclatures: DEV (for developer), USER (for user)
 **snippets_tbl**
 
 -   `create_snippets_tbl*`: create "snippets_tbl" & set ... attribute
--   `new_snippets_tbl*`: add "snippets_tbl" class to existing "tbl_df" class
+-   `new_snippets_tbl()`: add "snippets_tbl" class to existing "tbl_df" class
 -   `is_snippets_tbl*`: check class
+
+**snippets_list**
+
+-   `new_snippets_list()`: add "snippets_list" class to existing "list"
 
 ## Plan: USER functions
 

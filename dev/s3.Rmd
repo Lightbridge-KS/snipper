@@ -17,6 +17,48 @@ library(here)
 usethis::use_r("s3")
 ```
 
+## Class: `snippets_list` ?
+
+Possibly to provide constructor to user ??
+
+### New: `snippets_list` ?
+
+```{r new_snippets_list}
+new_snippets_list <- function(x = list()){
+  stopifnot(is.list(x))
+  if(inherits(x, "snippets_list")) return(x)
+  
+  class(x) <- c("snippets_list", class(x))
+  x
+}
+
+new_snippets_list(list(a = 1))
+```
+
+```{r}
+l <- list(
+  hello = list(
+    scope = "markdown",
+    prefix = "hello",
+    body = c("hello, there", "$0"),
+    description = "Say Hello"
+  )
+)
+
+l_snp <- new_snippets_list(l)
+l_snp
+```
+
+```{r}
+# Subset will lost class
+class(l_snp[1])
+class(l_snp$hello)
+
+# Append will also lost class
+append(l_snp, list(world = "hi")) %>% class()
+append(l_snp, l_snp) %>% class()
+```
+
 
 ## Class: `snippets_tbl`
 

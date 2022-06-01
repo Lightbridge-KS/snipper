@@ -108,6 +108,7 @@ usethis::use_package("cli")
 usethis::use_package("tibble") 
 usethis::use_package("purrr") 
 usethis::use_package("dplyr") 
+usethis::use_package("tidyr") 
 usethis::use_package("jsonlite") 
 ```
 
@@ -327,7 +328,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("var1", "var2"))
 in the same file as where you have package-level documentation.
 
 ```{r}
-# usethis::use_package_doc()
+rstudioapi::navigateToFile(here("R/snipper-package.R"))
 ```
 
 See this [Discussion](https://github.com/STAT545-UBC/Discussion/issues/451)
