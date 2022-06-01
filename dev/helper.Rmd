@@ -1,0 +1,56 @@
+---
+title: "Helpers"
+author: "kittipos sirivongrungson"
+date: '2022-06-01'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("dev/helper.Rmd")
+library(here)
+
+```
+
+```{r}
+usethis::use_r("utils")
+rstudioapi::navigateToFile(here("tests/testthat/test-utils.R"))
+```
+
+
+### Helper: Unique if One Value Duplicated
+
+```{r unique_if_all_same}
+unique_if_all_same <- function(x) {
+  
+  xu <- unique(x)
+  if(length(xu) == 1L) {
+    xu
+  } else {
+    x
+  }
+  
+}
+
+unique_if_all_same(c(1, 1, 1))
+unique_if_all_same(c(1, 1, 2))
+```
+
+
+### Helper: Check One Duplicate Values
+
+
+```{r is_one_val_rep}
+is_one_val_rep <- function(x) {
+  
+  if(length(x) > 1L && length(unique(x)) == 1L) TRUE else FALSE
+  
+}
+
+is_one_val_rep(c(1))
+is_one_val_rep(c(1, 1))
+is_one_val_rep(c(1, 2))
+is_one_val_rep(c(1, 1, 2))
+```
+
+

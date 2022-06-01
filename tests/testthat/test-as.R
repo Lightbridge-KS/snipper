@@ -35,7 +35,7 @@ snp_tbl2 <- as_snippets_tbl(l2) # To snippelt tbl
 # List to Snippet Tbl -----------------------------------------------------
 
 
-test_that("as_snippets_tbl() works", {
+test_that("as_snippets_tbl.list()  works", {
 
   # Check Class
   expect_s3_class(snp_tbl1, c("snippets_tbl", "tbl_df"))
@@ -54,6 +54,27 @@ test_that("as_snippets_tbl() works", {
 
 })
 
+
+# DataFrame to Snippet Tbl ------------------------------------------------
+
+tbl3 <- tibble::tibble(
+  snippet_name = c(rep("hello", 2), rep("world", 2)),
+  scope = "markdown",
+  prefix = snippet_name,
+  body = c("hello", "how are you", "Welcome !", "To a new world!"),
+  description = NA
+)
+
+snp_tbl3 <- as_snippets_tbl(tbl3)
+
+test_that("as_snippets_tbl.data.frame() works", {
+  # Check Class
+  expect_s3_class(snp_tbl3, c("snippets_tbl", "tbl_df"))
+  # Check Column Types
+  expect_type(snp_tbl3$prefix, "list")
+  expect_type(snp_tbl3$body, "list")
+  expect_type(snp_tbl3$description, "list")
+})
 
 
 # Snippet Tbl to List -----------------------------------------------------
