@@ -47,3 +47,21 @@ test_that("validate_snippets_tbl_colnms() works", {
   expect_error(validate_snippets_tbl_colnms(df_incomp))
 
 })
+
+
+# Validate Write File -----------------------------------------------------
+
+
+test_that("validate_write_file() works", {
+
+  tmp_path <- tempfile()
+  write.csv(head(iris), tmp_path)
+
+  expect_error(validate_write_file(tmp_path, overwrite = FALSE))
+
+})
+
+
+
+
+
