@@ -72,7 +72,23 @@ as_snippets_tbl.list <- function(x) {
 # Convert: Snippet tbl -> List --------------------------------------------
 
 
+
+#' List Conversion from Snippet Tibble
+#'
+#' S3 method for convert "snippets_tbl" object to list
+#'
+#'
+#' @param x "snippets_tbl" object to convert
+#' @param ... For compatibility, not in use
+#'
+#' @return A List
 #' @export
+#'
+#' @examples
+#' path_vs_r <- snipper::snipper_example("vscode/r.code-snippets")
+#'
+#' l <- as.list(read_snip_vscode(path_vs_r))
+#' str(l)
 as.list.snippets_tbl <- function(x, ...) {
 
   colnms <- c("snippet_name", "scope", "prefix", "body", "description")
