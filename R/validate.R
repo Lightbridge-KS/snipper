@@ -24,3 +24,18 @@ validate_as_snippets_tbl.list <- function(x) {
   x
 
 }
+
+#' Validate Snippet Tibble Column names
+#'
+#' @param x snippet tibble
+#'
+#' @return SE: Error Msg (if any)
+#' @noRd
+validate_snippets_tbl_colnms <- function(x) {
+
+  colnms <- c("snippet_name", "scope", "prefix", "body", "description")
+  x_sym <- dplyr::ensym(x)
+  # Validate Colnames
+  if(!all(colnms %in% colnames(x))) cli::cli_abort("{.code {x_sym}} Must have column names: {colnms}")
+  x
+}

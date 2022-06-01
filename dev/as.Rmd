@@ -174,7 +174,7 @@ as.list.snippets_tbl <- function(x, ...) {
 
  ls_tp <- x %>% 
     # Select 5 columns
-    dplyr::select(dplyr::all_of(colnms)) %>% 
+    dplyr::select(dplyr::all_of(colnms[-1])) %>% 
     # Set Names of elemental rows
     purrr::modify(~stats::setNames(.x, x[["snippet_name"]])) %>% 
     # To list & Transpose

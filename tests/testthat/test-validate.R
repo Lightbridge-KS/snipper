@@ -26,3 +26,24 @@ test_that("validate_as_snippets_tbl.list() works", {
   expect_error(validate_as_snippets_tbl.list(l3))
 
 })
+
+
+
+# Validate: Snippet tbl column name ---------------------------------------
+
+test_that("validate_snippets_tbl_colnms() works", {
+
+  df_comp <- data.frame(
+    snippet_name = 1,
+    scope = 2,
+    prefix = 3,
+    body = 4,
+    description = 5,
+    other = 6
+  )
+
+  df_incomp <- df_comp[-1]
+
+  expect_error(validate_snippets_tbl_colnms(df_incomp))
+
+})

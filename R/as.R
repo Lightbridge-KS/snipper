@@ -68,3 +68,34 @@ as_snippets_tbl.list <- function(x) {
 
 }
 
+
+# Convert: Snippet tbl -> List --------------------------------------------
+
+
+#' @export
+as.list.snippets_tbl <- function(x, ...) {
+
+  colnms <- c("snippet_name", "scope", "prefix", "body", "description")
+  # Validate Column Names
+  validate_snippets_tbl_colnms(x)
+  # Check Duplicated Values
+  if(any(duplicated(x[["snippet_name"]]))) cli::cli_abort("{.code snippet_name} must not have duplicated values.")
+
+
+  ls_tp <- x %>%
+    # Select 5 columns
+    dplyr::select(dplyr::all_of(colnms[-1])) %>%
+    # Set Names of elemental rows
+    purrr::modify(~stats::setNames(.x, x[["snippet_name"]])) %>%
+    # To list & Transpose
+    as.list.data.frame() %>%
+    purrr::transpose()
+
+  # Remove `NA`
+  lv1_has_na_lgl <- ls_tp %>% purrr::map_lgl(~any(is.na(.x)))
+  lv2_has_na_lgl <- is.na(ls_tp[[which(lv1_has_na_lgl)]])
+
+  ls_tp[[which(lv1_has_na_lgl)]][lv2_has_na_lgl] <- NULL
+  ls_tp
+
+}
