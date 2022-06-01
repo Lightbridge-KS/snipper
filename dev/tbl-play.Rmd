@@ -67,9 +67,7 @@ t_tbl$y
 
 ### Operation on subclass of `tbl_df`
 
-Conclusion: subclass is preserved with operations
-
-
+Subclass is preserved with these operations
 
 #### Mutate Columns
 
@@ -102,5 +100,15 @@ t_tbl %>%
 ```{r}
 t_tbl %>% 
   dplyr::rows_insert(tibble(name = "c", x = list(1:2)), by = "name") 
+```
+
+### Loose Class
+
+### Unnest (Loose Class)
+
+```{r}
+t_tbl %>% 
+  tidyr::unnest(c(x)) %>% 
+  class()
 ```
 

@@ -23,6 +23,6 @@ head(rs_r_chr)
 
 
 ```{r}
-rs_r_chr
+writeLines(head(rs_r_chr))
 ```
 

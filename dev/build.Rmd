@@ -104,8 +104,10 @@ usethis::use_pipe() # If package use `%>%`
 usethis::use_tibble() # If package use `tbl_df` class
 
 usethis::use_package("fs") 
+usethis::use_package("cli") 
 usethis::use_package("tibble") 
 usethis::use_package("purrr") 
+usethis::use_package("dplyr") 
 usethis::use_package("jsonlite") 
 ```
 
