@@ -4,10 +4,10 @@
 \alias{as_snippets_tbl}
 \title{Convert List to Snippet Tibble}
 \usage{
-as_snippets_tbl(ls)
+as_snippets_tbl(x)
 }
 \arguments{
-\item{ls}{A list to be convert to snippets tibble (see @details and @examples)}
+\item{x}{A list to be convert to snippets tibble (see @details and @examples)}
 }
 \value{
 A tibble with subclass "snippets_tbl" containing 6 columns, as per \href{https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax}{VS code snippet syntax}
