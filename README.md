@@ -8,6 +8,8 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/Lightbridge-KS/snipper/workflows/R-CMD-check/badge.svg)](https://github.com/Lightbridge-KS/snipper/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/Lightbridge-KS/snipper/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Lightbridge-KS/snipper?branch=main)
 <!-- badges: end -->
 
 > R package to Read, Write, and Manipulate Code Snippets (currently, [VS

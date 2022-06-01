@@ -362,7 +362,7 @@ Ref: [Quickstart WF](https://github.com/r-lib/actions/tree/v1/examples#quickstar
 1. Call `usethis::use_coverage()`
 
 ```{r use_coverage}
-# usethis::use_coverage()
+usethis::use_coverage()
 ```
 
 2. Use github action `test-coverage` 
@@ -370,7 +370,7 @@ Ref: [Quickstart WF](https://github.com/r-lib/actions/tree/v1/examples#quickstar
 This will connect your package to codecov.
 
 ```{r gha-test-coverage}
-# usethis::use_github_action("test-coverage")
+usethis::use_github_action("test-coverage")
 ```
 
 Ref: [test coverage WF](https://github.com/r-lib/actions/tree/v1/examples#test-coverage-workflow)
