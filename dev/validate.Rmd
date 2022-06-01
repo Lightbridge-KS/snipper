@@ -22,8 +22,10 @@ rstudioapi::navigateToFile("tests/testthat/test-validate.R")
 
 ### Validate: List
 
-```{r validate_as_snippets_tbl.list}
-validate_as_snippets_tbl.list <- function(x) {
+`validate_snippets_list`
+
+```{r validate_snippets_list}
+validate_snippets_list <- function(x) {
   
   x_sym <- dplyr::ensym(x)
   
@@ -42,13 +44,13 @@ validate_as_snippets_tbl.list <- function(x) {
   
 }
 
-validate_as_snippets_tbl.list(ls_ex)
+validate_snippets_list(ls_ex)
 ```
 
 ```{r}
 l1 <- list(1:2, c("a","b"))
 
-validate_as_snippets_tbl.list(l1)
+validate_snippets_list(l1)
 
   l2 <- list(
     list(
@@ -63,7 +65,7 @@ validate_as_snippets_tbl.list(l1)
       description = "Say Welcome"
     )
   )
-validate_as_snippets_tbl.list(l3)
+validate_snippets_list(l3)
 ```
 
 

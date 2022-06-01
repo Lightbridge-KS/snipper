@@ -2,12 +2,12 @@
 # Validate: Convert List to Snippet Tbl ----------------------------------------------------------------
 
 
-test_that("validate_as_snippets_tbl.list() works", {
+test_that("validate_snippets_list() works", {
 
   # Validate List of List
   l1 <- list(1:2, c("a","b"))
-  expect_error(validate_as_snippets_tbl.list(c("a", "b")))
-  expect_error(validate_as_snippets_tbl.list(l1))
+  expect_error(validate_snippets_list(c("a", "b")))
+  expect_error(validate_snippets_list(l1))
   # Element must has names
   l2 <- list(
     list(
@@ -15,7 +15,7 @@ test_that("validate_as_snippets_tbl.list() works", {
       body = "Welcome to a new world!"
     )
   )
-  expect_error(validate_as_snippets_tbl.list(l2))
+  expect_error(validate_snippets_list(l2))
   # Must has "prefix" and "body"
   l3 <- list(
     world = list(
@@ -23,7 +23,7 @@ test_that("validate_as_snippets_tbl.list() works", {
       description = "Say Welcome"
     )
   )
-  expect_error(validate_as_snippets_tbl.list(l3))
+  expect_error(validate_snippets_list(l3))
 
 })
 

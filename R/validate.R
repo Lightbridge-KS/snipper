@@ -6,7 +6,7 @@
 #'
 #' @return SE: Error Msg (if any)
 #' @noRd
-validate_as_snippets_tbl.list <- function(x) {
+validate_snippets_list <- function(x) {
 
   x_sym <- dplyr::ensym(x)
 

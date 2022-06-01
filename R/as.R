@@ -45,7 +45,7 @@ as_snippets_tbl <- function(x) {
 as_snippets_tbl.list <- function(x) {
 
   # Validate
-  validate_as_snippets_tbl.list(x)
+  validate_snippets_list(x)
 
   # If "scope" is not provided set to `NA`
   scope_x <- purrr::map(x, "scope")
