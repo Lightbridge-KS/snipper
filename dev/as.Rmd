@@ -183,11 +183,17 @@ as.list.snippets_tbl <- function(x, ...) {
  
  # Remove `NA`
  lv1_has_na_lgl <- ls_tp %>% purrr::map_lgl(~any(is.na(.x)))
- lv2_has_na_lgl <- is.na(ls_tp[[which(lv1_has_na_lgl)]])
  
- ls_tp[[which(lv1_has_na_lgl)]][lv2_has_na_lgl] <- NULL
- ls_tp
- 
+ if (!any(lv1_has_na_lgl)) {
+   # No any `NA`
+   ls_tp
+ } else {
+   # Has any `NA`
+   lv2_has_na_lgl <- is.na(ls_tp[[which(lv1_has_na_lgl)]])
+   ls_tp[[which(lv1_has_na_lgl)]][lv2_has_na_lgl] <- NULL
+   ls_tp
+ }
+
 }
 
 as.list.snippets_tbl(as_snippets_tbl(ls_ex))
@@ -196,8 +202,16 @@ as.list.snippets_tbl(as_snippets_tbl(ls_ex))
 
 
 ```{r}
-as.list(as_snippets_tbl(ls_ex)) %>% 
-  jsonlite::toJSON(pretty = TRUE)
+list(
+  hello = list(
+    scope = "markdown",
+    prefix = "hello",
+    body = c("hello, there", "$0"),
+    description = "Say Hello"
+  )
+) %>% 
+  as_snippets_tbl() %>% 
+  as.list()
 ```
 
 

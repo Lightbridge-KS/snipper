@@ -93,9 +93,15 @@ as.list.snippets_tbl <- function(x, ...) {
 
   # Remove `NA`
   lv1_has_na_lgl <- ls_tp %>% purrr::map_lgl(~any(is.na(.x)))
-  lv2_has_na_lgl <- is.na(ls_tp[[which(lv1_has_na_lgl)]])
 
-  ls_tp[[which(lv1_has_na_lgl)]][lv2_has_na_lgl] <- NULL
-  ls_tp
+  if (!any(lv1_has_na_lgl)) {
+    # No any `NA`
+    ls_tp
+  } else {
+    # Has any `NA`
+    lv2_has_na_lgl <- is.na(ls_tp[[which(lv1_has_na_lgl)]])
+    ls_tp[[which(lv1_has_na_lgl)]][lv2_has_na_lgl] <- NULL
+    ls_tp
+  }
 
 }
