@@ -37,14 +37,17 @@ rstudioapi::navigateToFile(here("tests/testthat/test-vscode-read.R"))
 ### Try Read VS Code Snippet
 
 ```{r}
-snipper::read_vscode_snippets(path_vs)
+snipper::read_snip_vscode(path_vs)
 ```
 
 
 ### Read JSON to Tibble (Wrapper)
 
-```{r read_vscode_snippets}
-read_vscode_snippets <- function(paths, 
+`read_snip_vscode`
+
+
+```{r read_snip_vscode}
+read_snip_vscode <- function(paths, 
                                  recurse = FALSE,
                                  regexp = "\\.(code-snippets)|(json)$",
                                  ...
@@ -61,14 +64,14 @@ read_vscode_snippets <- function(paths,
   dir_files <- fs::dir_ls(dir_chr, recurse = recurse, regexp = regexp, ...)
   abs_paths <- c(files_chr, dir_files)
   
-  tbl <- read_vscode_snippets_files(abs_paths)
+  tbl <- read_snip_vscode_files(abs_paths)
   # Add "snippets_tbl" subclass
   new_snippets_tbl(tbl)
 }
 
-read_vscode_snippets(c("inst/extdata/vscode/meet.code-snippets"))
-read_vscode_snippets(c(path_vs_meet))
-read_vscode_snippets(c(path_vs, path_vs_meet)) #%>% class()
+read_snip_vscode(c("inst/extdata/vscode/meet.code-snippets"))
+read_snip_vscode(c(path_vs_meet))
+read_snip_vscode(c(path_vs, path_vs_meet)) #%>% class()
 ```
 
 
@@ -94,8 +97,10 @@ names(is_dir_ex1[is_dir_ex1]) %>% fs::dir_ls()
 
 ### Read Multiple Files
 
-```{r read_vscode_snippets_files}
-read_vscode_snippets_files <- function(files) {
+`read_snip_vscode_files`
+
+```{r read_snip_vscode_files}
+read_snip_vscode_files <- function(files) {
   
   # Validate All `files` must be files
   stopifnot(all(fs::is_file(files)))
@@ -108,9 +113,9 @@ read_vscode_snippets_files <- function(files) {
   
 }
 
-read_vscode_snippets_files(fs::dir_ls(path_vs))
-read_vscode_snippets_files(fs::dir_ls(path_vs)) %>% class()
-# read_vscode_snippets_files(path_vs) # Error
+read_snip_vscode_files(fs::dir_ls(path_vs))
+read_snip_vscode_files(fs::dir_ls(path_vs)) %>% class()
+# read_snip_vscode_files(path_vs) # Error
 ```
 
 ### Read Single File (DEPRECATED)

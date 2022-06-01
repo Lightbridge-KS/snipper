@@ -27,8 +27,8 @@
 #'
 #' @examples
 #' path_vs_meet <- snipper::snipper_example("vscode/meet.code-snippets")
-#' read_vscode_snippets(path_vs_meet)
-read_vscode_snippets <- function(paths,
+#' read_snip_vscode(path_vs_meet)
+read_snip_vscode <- function(paths,
                                  recurse = FALSE,
                                  regexp = "\\.(code-snippets)|(json)$",
                                  ...
@@ -45,7 +45,7 @@ read_vscode_snippets <- function(paths,
   dir_files <- fs::dir_ls(dir_chr, recurse = recurse, regexp = regexp, ...)
   abs_paths <- c(files_chr, dir_files)
 
-  tbl <- read_vscode_snippets_files(abs_paths)
+  tbl <- read_snip_vscode_files(abs_paths)
   # Add "snippets_tbl" subclass
   new_snippets_tbl(tbl)
 }
@@ -63,7 +63,7 @@ read_vscode_snippets <- function(paths,
 #' @return a tibble with column: `file_name` added
 #' @noRd
 #'
-read_vscode_snippets_files <- function(files) {
+read_snip_vscode_files <- function(files) {
 
   # Validate All `files` must be files
   stopifnot(all(fs::is_file(files)))
