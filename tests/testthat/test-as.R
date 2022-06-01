@@ -31,32 +31,3 @@ test_that("as_snippets_tbl() works", {
 
 
 })
-
-# Validate ----------------------------------------------------------------
-
-
-
-test_that("as_snippets_tbl_validate() works", {
-
-  # Validate List of List
-  l1 <- list(1:2, c("a","b"))
-  expect_error(as_snippets_tbl_validate(c("a", "b")))
-  expect_error(as_snippets_tbl_validate(l1))
-  # Element must has names
-  l2 <- list(
-    list(
-      prefix = "world",
-      body = "Welcome to a new world!"
-      )
-    )
-  expect_error(as_snippets_tbl_validate(l2))
-  # Must has "prefix" and "body"
-  l3 <- list(
-    world = list(
-      scope = "markdown",
-      description = "Say Welcome"
-    )
-  )
-  expect_error(as_snippets_tbl_validate(l3))
-
-})

@@ -1,3 +1,8 @@
+
+
+# Generic: Convert to Snippet Tibble -----------------------------------------------------------------
+
+
 #' Convert List to Snippet Tibble
 #'
 #' @describeIn Convert list to a snippets tibble where each elements of list represent each snippets.
@@ -10,7 +15,7 @@
 #' * \strong{`description`:} an optional description of the snippet displayed by IntelliSense.
 #'
 #'
-#' @param ls A list to be convert to snippets tibble (see @details and @examples)
+#' @param x A list to be convert to snippets tibble (see @details and @examples)
 #'
 #' @return A tibble with subclass "snippets_tbl" containing 6 columns, as per [VS code snippet syntax](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax)
 #' @export
@@ -29,50 +34,37 @@
 #'   )
 #' )
 #' as_snippets_tbl(ls_ex)
-as_snippets_tbl <- function(ls) {
+as_snippets_tbl <- function(x) {
+  UseMethod("as_snippets_tbl")
+}
+
+
+# List Method -------------------------------------------------------------
+
+#' @export
+as_snippets_tbl.list <- function(x) {
 
   # Validate
-  as_snippets_tbl_validate(ls)
+  validate_as_snippets_tbl.list(x)
 
   # If "scope" is not provided set to `NA`
-  scope_ls <- purrr::map(ls, "scope")
-  noscope_lgl <- purrr::map_lgl(scope_ls, is.null)
-  scope_ls[noscope_lgl] <- NA_character_
+  scope_x <- purrr::map(x, "scope")
+  noscope_lgl <- purrr::map_lgl(scope_x, is.null)
+  scope_x[noscope_lgl] <- NA_character_
   # If "description" is not provided set to `NA`
-  desc_ls <- purrr::map(ls, "description")
-  nodesc_lgl <- purrr::map_lgl(desc_ls, is.null)
-  desc_ls[nodesc_lgl] <- NA_character_
+  desc_x <- purrr::map(x, "description")
+  nodesc_lgl <- purrr::map_lgl(desc_x, is.null)
+  desc_x[nodesc_lgl] <- NA_character_
 
   tbl <- tibble::tibble(
-    snippet_name = names(ls),
-    scope = as.character(scope_ls), # scope always length 1
-    prefix = purrr::map(ls, "prefix"),
-    body = purrr::map(ls, "body"),
-    description = desc_ls
+    snippet_name = names(x),
+    scope = as.character(scope_x), # scope always length 1
+    prefix = purrr::map(x, "prefix"),
+    body = purrr::map(x, "body"),
+    description = desc_x
   )
   # Set Class
   new_snippets_tbl(tbl)
 
 }
 
-
-# Helper: Validate List ---------------------------------------------------
-
-
-
-as_snippets_tbl_validate <- function(ls) {
-
-  # Validate List of List
-  if(!(is.list(ls) && purrr::every(ls, is.list))){
-    stop("`ls` must be a list containing list of snippets", call. = FALSE)
-  }
-  # Element must has names
-  not_valid_names <- any(is.null(names(ls)), names(ls) == "")
-  if(not_valid_names) stop("Elements in `ls` must have names for `snippet_name`.", call. = FALSE)
-  # Must has "prefix" and "body"
-  has_prefix_n_body <- purrr::every(ls, ~all(c("prefix", "body") %in% names(.x)))
-  if(!has_prefix_n_body) stop("Snippets must contain 'prefix' and 'body' fields.", call. = FALSE)
-
-  ls
-
-}

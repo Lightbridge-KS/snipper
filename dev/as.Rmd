@@ -12,41 +12,17 @@ library(here)
 
 ```
 
+### Plan
+
+-   Convert List <-> Snippet Tibble
+
 ```{r}
 usethis::use_r("as")
 rstudioapi::navigateToFile(here("tests/testthat/test-as.R"))
 ```
 
 
-### As Snippets Tibble
-
-```{r as_snippets_tbl}
-as_snippets_tbl <- function(ls) {
-  
-  # Validate
-  as_snippets_tbl_validate(ls)
-  
-  # If "scope" is not provided set to `NA`
-  scope_ls <- purrr::map(ls, "scope")
-  noscope_lgl <- purrr::map_lgl(scope_ls, is.null)
-  scope_ls[noscope_lgl] <- NA_character_
-  # If "description" is not provided set to `NA`
-  desc_ls <- purrr::map(ls, "description")
-  nodesc_lgl <- purrr::map_lgl(desc_ls, is.null)
-  desc_ls[nodesc_lgl] <- NA_character_
-  
-  tbl <- tibble::tibble(
-    snippet_name = names(ls),
-    scope = as.character(scope_ls), # scope always length 1
-    prefix = purrr::map(ls, "prefix"),
-    body = purrr::map(ls, "body"),
-    description = desc_ls
-  )
-  # Set Class
-  new_snippets_tbl(tbl)
-  
-}
-
+```{r ls_ex}
 ls_ex <- list(
   hello = list(
     scope = "markdown",
@@ -56,7 +32,7 @@ ls_ex <- list(
   ),
   world = list(
     prefix = "world",
-    body = "Welcome to a new world!"
+    body = c("Hi","Hi", "Welcome to a new world!")
   )
 ) 
 
@@ -64,25 +40,221 @@ as_snippets_tbl(ls_ex)
 ```
 
 ```{r}
-as_snippets_tbl_validate <- function(ls) {
+as_snippets_tbl(ls_ex) %>% 
+  as.list()
+```
+
+
+## Generic: As Snippets Tibble
+
+```{r as_snippets_tbl}
+as_snippets_tbl <- function(x) {
+  UseMethod("as_snippets_tbl")
+}
+```
+
+
+### Method: As Snippets Tibble (from List)
+
+```{r as_snippets_tbl.list}
+as_snippets_tbl.list <- function(x) {
   
-  # Validate List of List
-  if(!(is.list(ls) && purrr::every(ls, is.list))){
-    stop("`ls` must be a list containing list of snippets", call. = FALSE)
-  } 
-  # Element must has names
-  not_valid_names <- any(is.null(names(ls)), names(ls) == "")
-  if(not_valid_names) stop("Elements in `ls` must have names for `snippet_name`.", call. = FALSE)
-  # Must has "prefix" and "body"
-  has_prefix_n_body <- purrr::every(ls, ~all(c("prefix", "body") %in% names(.x)))
-  if(!has_prefix_n_body) stop("Snippets must contain 'prefix' and 'body' fields.", call. = FALSE)
+  # Validate
+  validate_as_snippets_tbl.list(x)
   
-  ls
+  # If "scope" is not provided set to `NA`
+  scope_x <- purrr::map(x, "scope")
+  noscope_lgl <- purrr::map_lgl(scope_x, is.null)
+  scope_x[noscope_lgl] <- NA_character_
+  # If "description" is not provided set to `NA`
+  desc_x <- purrr::map(x, "description")
+  nodesc_lgl <- purrr::map_lgl(desc_x, is.null)
+  desc_x[nodesc_lgl] <- NA_character_
+  
+  tbl <- tibble::tibble(
+    snippet_name = names(x),
+    scope = as.character(scope_x), # scope always length 1
+    prefix = purrr::map(x, "prefix"),
+    body = purrr::map(x, "body"),
+    description = desc_x
+  )
+  # Set Class
+  new_snippets_tbl(tbl)
   
 }
 
-as_snippets_tbl_validate(ls_ex)
+as_snippets_tbl.list(ls_ex) 
 ```
+
+
+
+
+### (NOT USE) Methods: As Snippets Tibble (from Data Frame)
+
+**Reason not to use:** there is no way to know whether the value should be duplicated when nest data frame back to list columns.
+
+`as_snippets_tbl.data.frame`
+
+```{r as_snippets_tbl.data.frame}
+as_snippets_tbl.data.frame <- function(x, ...) {
+  
+  colnms <- c("snippet_name", "scope", "prefix", "body", "description")
+  # Validate that must have at least these 5 column names
+  validate_snippets_tbl_colnms(x)
+  
+  tbl_uniq_name <- x %>% 
+    # Select 5 columns
+    dplyr::select(dplyr::all_of(colnms)) %>% 
+    # Unnest list columns (not effect non-list column)
+    tidyr::unnest(c(prefix, body, description)) %>% 
+    # Pack it up to list column, grouped by `snippet_name` and `scope`
+    dplyr::group_by(snippet_name, scope) %>% 
+    dplyr::summarise(
+      dplyr::across(c(prefix, body, description), ~list(.x)), .groups = "drop"
+      ) 
+  
+  tbl <- tbl_uniq_name %>% 
+    # Set Names of elemental rows
+    purrr::modify(~stats::setNames(.x, tbl_uniq_name[["snippet_name"]])) 
+  
+  # Add Class
+  new_snippets_tbl(tbl)
+  
+}
+
+as_snippets_tbl.data.frame(as_snippets_tbl(ls_ex)) %>% 
+  as.list.data.frame()
+```
+
+There is no way to be sure when nest back
+
+```{r}
+tibble(id = letters[1:3],
+       x = list(a = c(1, 1), b = 3:5, c = 7L),
+       y = list(a = "hi", b = "there", c = "a")) %>% 
+  tidyr::unnest(c(x,y)) %>% 
+  
+  group_by(id) %>% 
+  summarise(across(c(x,y), list)) # [1, 2] is inaccurate
+```
+
+
+
+```{r}
+as_snippets_tbl(ls_ex) %>% 
+  
+  tidyr::unnest(prefix:description) %>% 
+  #tidyr::unnest(prefix:description) %>% 
+  group_by(snippet_name, scope) %>% 
+  summarise(across(c(prefix, body, description), ~list(.x)), 
+            .groups = "drop") %>% 
+  
+  # Set Names
+  purrr::modify(~setNames(.x, c("hello", "world"))) %>% 
+  # To list & Transpose
+  as.list.data.frame() %>% 
+  purrr::transpose() 
+```
+
+
+
+### As List
+
+`as.list.snippets_tbl`
+
+```{r as.list.snippets_tbl}
+as.list.snippets_tbl <- function(x, ...) {
+  
+  colnms <- c("snippet_name", "scope", "prefix", "body", "description")
+  # Validate Column Names
+  validate_snippets_tbl_colnms(x)
+  # Check Duplicated Values
+  if(any(duplicated(x[["snippet_name"]]))) cli::cli_abort("{.code snippet_name} must not have duplicated values.")
+  
+
+ ls_tp <- x %>% 
+    # Select 5 columns
+    dplyr::select(dplyr::all_of(colnms)) %>% 
+    # Set Names of elemental rows
+    purrr::modify(~stats::setNames(.x, x[["snippet_name"]])) %>% 
+    # To list & Transpose
+    as.list.data.frame() %>% 
+    purrr::transpose()
+ 
+ # Remove `NA`
+ lv1_has_na_lgl <- ls_tp %>% purrr::map_lgl(~any(is.na(.x)))
+ lv2_has_na_lgl <- is.na(ls_tp[[which(lv1_has_na_lgl)]])
+ 
+ ls_tp[[which(lv1_has_na_lgl)]][lv2_has_na_lgl] <- NULL
+ ls_tp
+ 
+}
+
+as.list.snippets_tbl(as_snippets_tbl(ls_ex))
+```
+
+
+
+```{r}
+as.list(as_snippets_tbl(ls_ex)) %>% 
+  jsonlite::toJSON(pretty = TRUE)
+```
+
+
+Error Cases
+
+```{r}
+as.list.snippets_tbl(iris)
+as.list.snippets_tbl(as_snippets_tbl(ls_ex)[c(1,1), ])
+```
+
+
+
+
+
+Unnest Loose Class !!
+ 
+ 
+```{r}
+as_snippets_tbl(ls_ex) %>%
+  tidyr::unnest(prefix:description) %>% class()
+```
+
+
+
+
+Name vector according to `snippet_name` and transpose
+
+```{r}
+as_snippets_tbl(ls_ex) %>% 
+  # Set Names
+  purrr::modify(~setNames(.x, c("hello", "world"))) %>% 
+  # To list & Transpose
+  as.list.data.frame() %>% 
+  purrr::transpose() %>% 
+  jsonlite::toJSON(pretty = T)
+```
+
+
+
+transpose named vector
+
+```{r}
+tibble(x = c(a = "a",b = "b")) %>% 
+  as.list.data.frame() %>% 
+  purrr::transpose()
+```
+
+
+
+```{r}
+as_snippets_tbl(ls_ex) %>% 
+  select(scope:description) %>% 
+  as.list.data.frame() %>% 
+  purrr::transpose()
+```
+
+
 
 
 ### Helper: Flatten list if elements is Length 1 (Not In USE)
@@ -130,6 +302,9 @@ purrr::map(ls_ex, "scope")[c(F, T)]
 purrr::map(ls_ex, "description")
 purrr::map_chr(ls_ex, "scope")
 ```
+
+
+
 
 
 
