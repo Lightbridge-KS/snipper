@@ -10,6 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/Lightbridge-KS/snipper/workflows/R-CMD-check/badge.svg)](https://github.com/Lightbridge-KS/snipper/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/Lightbridge-KS/snipper/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Lightbridge-KS/snipper?branch=main)
+
 <!-- badges: end -->
 
 > R package to Read, Write, and Manipulate Code Snippets (currently, [VS
@@ -25,6 +26,28 @@ You can install the development version of snipper from
 # install.packages("remotes")
 remotes::install_github("Lightbridge-KS/snipper")
 ```
+
+# Overview
+
+`{snipper}` aims to be an interface for interacting with code snippets
+with an ease of manipulation in `R`.
+
+![workflow](man/figures/workflow.png)
+
+## Snippet tibble
+
+The central data structure for code snippet in R is **Snippet tibble**
+(`snippets_tbl`).
+
+-   It is a subclass of [tibble](https://tibble.tidyverse.org), so that
+    it can be manipulate with `{tidyverse}` tools.
+
+-   It can be constructed in `R` by list or data frame.
+
+-   It can be read or write to snippet file (currently, VS code).
+
+-   Its structure and syntax are designed according to [VS Code snippet
+    syntax](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax).
 
 # Usage
 

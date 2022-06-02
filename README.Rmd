@@ -16,13 +16,12 @@ knitr::opts_chunk$set(
 # snipper
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/Lightbridge-KS/snipper/workflows/R-CMD-check/badge.svg)](https://github.com/Lightbridge-KS/snipper/actions)
-[![Codecov test coverage](https://codecov.io/gh/Lightbridge-KS/snipper/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Lightbridge-KS/snipper?branch=main)
+
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![R-CMD-check](https://github.com/Lightbridge-KS/snipper/workflows/R-CMD-check/badge.svg)](https://github.com/Lightbridge-KS/snipper/actions) [![Codecov test coverage](https://codecov.io/gh/Lightbridge-KS/snipper/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Lightbridge-KS/snipper?branch=main)
+
 <!-- badges: end -->
 
 > R package to Read, Write, and Manipulate Code Snippets (currently, [VS code snippet](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-scope))
-
 
 # Installation
 
@@ -32,6 +31,26 @@ You can install the development version of snipper from [GitHub](https://github.
 # install.packages("remotes")
 remotes::install_github("Lightbridge-KS/snipper")
 ```
+
+# Overview
+
+`{snipper}` aims to be an interface for interacting with code snippets with an ease of manipulation in `R`.
+
+
+![workflow](man/figures/workflow.png)
+
+
+## Snippet tibble
+
+The central data structure for code snippet in R is **Snippet tibble** (`snippets_tbl`).
+
+-   It is a subclass of [tibble](https://tibble.tidyverse.org), so that it can be manipulate with `{tidyverse}` tools.
+
+-   It can be constructed in `R` by list or data frame.
+
+-   It can be read or write to snippet file (currently, VS code).
+
+-   Its structure and syntax are designed according to [VS Code snippet syntax](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax).
 
 # Usage
 
@@ -44,7 +63,6 @@ library(dplyr)
 
 `{snipper}` comes with example snippet files. See example snippet files with `snipper_example()`:
 
-
 ```{r path_vs}
 # List example VS Code Snippet files
 snipper_example("vscode")
@@ -55,7 +73,7 @@ path_vs <- snipper_example("vscode", return_path = TRUE)
 
 ## Read Snippet from File
 
-Read snippet into `R` as snippet [tibble](https://tibble.tidyverse.org) with `read_snip_*()` function. 
+Read snippet into `R` as snippet [tibble](https://tibble.tidyverse.org) with `read_snip_*()` function.
 
 For example, read [VS Code Snippets](https://code.visualstudio.com/docs/editor/userdefinedsnippets) from a folder with:
 
@@ -114,7 +132,6 @@ my_snp2 <- as_snippets_tbl(tbl_df)
 my_snp2
 ```
 
-
 ## Manipulate
 
 Since snippet tibble is **a tibble**, you can use **tidy tools** from package like `{dplyr}` to filter, sort, and manipulate in various ways, for example:
@@ -152,7 +169,6 @@ my_snp_md <- my_snp_all %>%
 my_snp_md
 ```
 
-
 ## Show Snippet
 
 Preview snippet with `show_snip_*()` function. For example, to preview VS code snippet as JSON use:
@@ -175,6 +191,6 @@ write_snip_vscode(my_snp_md, "my-snippet")
 setwd(.old_wd)
 ```
 
----
+------------------------------------------------------------------------
 
 Last updated: `r Sys.Date()`
