@@ -3,6 +3,7 @@
 S3method(as.list,snippets_tbl)
 S3method(as_snippets_tbl,data.frame)
 S3method(as_snippets_tbl,list)
+S3method(as_snippets_tbl,snippets_tbl)
 export("%>%")
 export(as_snippets_tbl)
 export(read_snip_vscode)

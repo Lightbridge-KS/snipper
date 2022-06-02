@@ -36,7 +36,7 @@ ls_ex <- list(
   )
 ) 
 
-as_snippets_tbl(ls_ex) 
+as_snippets_tbl(ls_ex)
 ```
 
 ```{r}
@@ -201,6 +201,14 @@ as_snippets_tbl(ls_ex) %>%
   tidyr::unnest(c(prefix, body, description)) %>% 
   group_by(snippet_name, scope) %>% 
   mutate(is_dup_body = is_one_val_rep(body))
+```
+### Methods: As Snippets Tibble (from `snippets_tbl`)
+
+```{r as_snippets_tbl.snippets_tbl}
+as_snippets_tbl.snippets_tbl <- function(x) {
+  validate_snippets_tbl_colnms(x)
+  x
+}
 ```
 
 

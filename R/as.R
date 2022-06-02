@@ -149,6 +149,14 @@ as_snippets_tbl.data.frame <- function(x) {
 
 }
 
+# Method: Snippet Tibble ------------------------------------------------------
+
+
+#' @export
+as_snippets_tbl.snippets_tbl <- function(x) {
+  validate_snippets_tbl_colnms(x)
+  x
+}
 
 
 # Convert: Snippet tbl -> List --------------------------------------------
