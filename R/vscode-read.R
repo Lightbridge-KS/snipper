@@ -34,7 +34,7 @@ read_snip_vscode <- function(paths,
                                  ...
 ) {
 
-  if(!all(fs::file_exists(paths))) cli::cli_abort("{.code paths} must point to files or directory.", call. = F)
+  if(!all(fs::file_exists(paths))) cli::cli_abort("{.code paths} must point to files or directory.")
   # Get File Paths
   is_files <- fs::is_file(paths)
   files_chr <- names(is_files[is_files])
