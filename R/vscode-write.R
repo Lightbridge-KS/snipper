@@ -48,10 +48,11 @@ write_snip_vscode <- function(snp,
   json <- show_snip_vscode(snp)
   writeLines(json, file)
 
-  cli::cli_alert_success("Write VS code snippet file at {.file {file}}")
+  cli_write_snippet_success("VS Code", file)
   return(invisible(json))
 
 }
+
 
 # Show --------------------------------------------------------------------
 

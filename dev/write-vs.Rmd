@@ -118,7 +118,7 @@ write_snip_vscode <- function(snp,
   json <- show_snip_vscode(snp)
   writeLines(json, file)
   
-  cli::cli_alert_success("Write VS code snippet file at {.file {file}}")
+  cli_write_snippet_success("VS Code", file)
   return(invisible(json))
   
 }
@@ -126,7 +126,7 @@ write_snip_vscode <- function(snp,
 write_snip_vscode(
   vs_snp_gen_tbl,
   here("snippets/vscode-snippets/.vscode/vs_snp_gen"),
-  overwrite = F
+  overwrite = T
   )
 ```
 

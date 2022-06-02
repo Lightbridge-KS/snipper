@@ -17,6 +17,24 @@ usethis::use_r("utils")
 rstudioapi::navigateToFile(here("tests/testthat/test-utils.R"))
 ```
 
+```{r}
+usethis::use_r("cli")
+```
+
+## CLI
+
+### CLI: Write Snippet File
+
+```{r cli_write_snippet_success}
+cli_write_snippet_success <- function(which, file) {
+  
+  cli::cli_alert_success("Write {which} snippet file at {.file {file}}")
+  
+}
+cli_write_snippet_success("VS Code", "someloc")
+```
+
+## Helper
 
 ### Helper: Unique if One Value Duplicated
 
