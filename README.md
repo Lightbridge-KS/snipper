@@ -36,7 +36,7 @@ with an ease of manipulation in `R`.
 
 ## Snippet tibble
 
-The central data structure for code snippet in R is **Snippet tibble**
+The central data structure for code snippet in `R` is **Snippet tibble**
 (`snippets_tbl`).
 
 -   It is a subclass of [tibble](https://tibble.tidyverse.org), so that
